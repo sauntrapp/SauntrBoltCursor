@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Platform, Dimensions, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
 import { Venue } from '@/lib/types';
-import { MapPin, Heart, Zap, Navigation, ExternalLink, X, Clock, Users, Star, Phone, Globe } from 'lucide-react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { calculateDistance, formatDistance } from '@/lib/mapUtils';
+import { MapPin, Heart, Zap, Navigation, X, Star, Phone, Globe } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -102,7 +100,6 @@ export default function SauntrMapView({
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Open Maps', onPress: () => {
-          // This would integrate with the existing mapUtils.openDirections
           Alert.alert('Directions', 'Opening in maps app...');
         }}
       ]
@@ -139,15 +136,6 @@ export default function SauntrMapView({
     Alert.alert('Fit to Venues', 'Map will zoom to show all your venues');
   };
 
-  // Default region if none provided
-  const defaultRegion = region || {
-    latitude: venues.length > 0 ? venues[0].latitude : 40.7589,
-    longitude: venues.length > 0 ? venues[0].longitude : -73.9851,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  };
-
-  // Web implementation with enhanced features
   return (
     <View style={styles.container}>
       <View style={[
@@ -155,7 +143,7 @@ export default function SauntrMapView({
         mapStyle === 'dark' && styles.darkMapContainer,
         mapStyle === 'satellite' && styles.satelliteMapContainer
       ]}>
-        {/* Map Background with realistic styling */}
+        {/* Mock Map Background */}
         <View style={[
           styles.webMapPlaceholder,
           mapStyle === 'dark' && styles.darkMapStyle,
@@ -197,7 +185,7 @@ export default function SauntrMapView({
           )}
         </View>
         
-        {/* Enhanced Venue Markers */}
+        {/* Venue Markers */}
         {mapReady && markers.map((marker) => (
           <TouchableOpacity
             key={marker.venue.id}
@@ -239,7 +227,6 @@ export default function SauntrMapView({
           <View style={styles.routeOverlay}>
             {routeSequence.map((venue, index) => {
               if (index === routeSequence.length - 1) return null;
-              const nextVenue = routeSequence[index + 1];
               return (
                 <View
                   key={`route-${index}`}

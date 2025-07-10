@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Platform, Dimensions, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
 import { Venue } from '@/lib/types';
-import { MapPin, Heart, Zap, Navigation, X, Star, Phone, Globe } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
+
+// Conditionally import react-native-maps only on native platforms
+let MapView: any, Marker: any, PROVIDER_GOOGLE: any, Polyline: any;
+if (Platform.OS !== 'web') {
+  const maps = require('react-native-maps');
+  MapView = maps.default;
+  Marker = maps.Marker;
+  PROVIDER_GOOGLE = maps.PROVIDER_GOOGLE;
+  Polyline = maps.Polyline;
+}
 
 interface SauntrMapViewProps {
   venues: Venue[];
